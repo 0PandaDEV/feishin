@@ -18,7 +18,7 @@ import {
 } from '/@/renderer/store';
 import { DropdownMenu } from '/@/shared/components/dropdown-menu/dropdown-menu';
 import { Icon } from '/@/shared/components/icon/icon';
-import { ServerListItem, ServerType } from '/@/shared/types/domain-types';
+import { ServerListItem, ServerType } from '/@/shared/types/domain/server-domain-types';
 
 const browser = isElectron() ? window.api.browser : null;
 const localSettings = isElectron() ? window.api.localSettings : null;

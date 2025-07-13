@@ -3,7 +3,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSendScrobble } from '/@/renderer/features/player/mutations/scrobble-mutation';
 import { usePlayerStore } from '/@/renderer/store';
 import { usePlaybackSettings } from '/@/renderer/store/settings.store';
-import { QueueSong, ServerType } from '/@/shared/types/domain-types';
+import { QueueSong } from '/@/shared/types/domain/player-domain-types';
+import { ServerType } from '/@/shared/types/domain/server-domain-types';
 import { PlayerStatus } from '/@/shared/types/types';
 
 /*
