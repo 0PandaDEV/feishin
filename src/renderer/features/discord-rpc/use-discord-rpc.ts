@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { controller } from '/@/renderer/api/controller';
 import {
-    getServerById,
+    useServerById,
     useDiscordSetttings,
     useGeneralSettings,
     usePlayerStore,
@@ -83,7 +83,7 @@ export const useDiscordRpc = () => {
                     if (song.serverType === ServerType.JELLYFIN && song.imageUrl) {
                         activity.largeImageKey = song.imageUrl;
                     } else if (song.serverType === ServerType.NAVIDROME) {
-                        const server = getServerById(song.serverId);
+                        const server = useServerById(song.serverId);
 
                         try {
                             const info = await controller.getAlbumInfo({

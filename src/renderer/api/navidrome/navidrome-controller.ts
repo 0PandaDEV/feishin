@@ -271,10 +271,10 @@ export const NavidromeController: ControllerEndpoint = {
 
         const res = await ndApiClient(apiClientProps).getAlbumList({
             query: {
-                _end: query.startIndex + (query.limit || 0),
+                _end: query.offset + (query.limit || 0),
                 _order: sortOrderMap.navidrome[query.sortOrder],
                 _sort: albumListSortMap.navidrome[query.sortBy],
-                _start: query.startIndex,
+                _start: query.offset,
                 artist_id: query.artistIds?.[0],
                 compilation: query.compilation,
                 genre_id: query.genres?.[0],
@@ -291,24 +291,24 @@ export const NavidromeController: ControllerEndpoint = {
 
         return {
             items: res.body.data.map((album) => ndNormalize.album(album, apiClientProps.server)),
-            startIndex: query?.startIndex || 0,
+            offset: query?.offset || 0,
             totalRecordCount: Number(res.body.headers.get('x-total-count') || 0),
         };
     },
     getAlbumListCount: async ({ apiClientProps, query }) =>
         NavidromeController.getAlbumList({
             apiClientProps,
-            query: { ...query, limit: 1, startIndex: 0 },
+            query: { ...query, limit: 1, offset: 0 },
         }).then((result) => result!.totalRecordCount!),
     getArtistList: async (args) => {
         const { apiClientProps, query } = args;
 
         const res = await ndApiClient(apiClientProps).getAlbumArtistList({
             query: {
-                _end: query.startIndex + (query.limit || 0),
+                _end: query.offset + (query.limit || 0),
                 _order: sortOrderMap.navidrome[query.sortOrder],
                 _sort: albumArtistListSortMap.navidrome[query.sortBy],
-                _start: query.startIndex,
+                _start: query.offset,
                 name: query.searchTerm,
                 ...query._custom?.navidrome,
                 role: query.role || undefined,
@@ -332,14 +332,14 @@ export const NavidromeController: ControllerEndpoint = {
                     apiClientProps.server,
                 ),
             ),
-            startIndex: query.startIndex,
+            offset: query.offset,
             totalRecordCount: Number(res.body.headers.get('x-total-count') || 0),
         };
     },
     getArtistListCount: async ({ apiClientProps, query }) =>
         NavidromeController.getArtistList({
             apiClientProps,
-            query: { ...query, limit: 1, startIndex: 0 },
+            query: { ...query, limit: 1, offset: 0 },
         }).then((result) => result!.totalRecordCount!),
     getDownloadUrl: SubsonicController.getDownloadUrl,
     getGenreList: async (args) => {
@@ -347,10 +347,10 @@ export const NavidromeController: ControllerEndpoint = {
 
         const res = await ndApiClient(apiClientProps).getGenreList({
             query: {
-                _end: query.startIndex + (query.limit || 0),
+                _end: query.offset + (query.limit || 0),
                 _order: sortOrderMap.navidrome[query.sortOrder],
                 _sort: genreListSortMap.navidrome[query.sortBy],
-                _start: query.startIndex,
+                _start: query.offset,
                 name: query.searchTerm,
             },
         });
@@ -361,7 +361,7 @@ export const NavidromeController: ControllerEndpoint = {
 
         return {
             items: res.body.data.map((genre) => ndNormalize.genre(genre)),
-            startIndex: query.startIndex || 0,
+            offset: query.offset || 0,
             totalRecordCount: Number(res.body.headers.get('x-total-count') || 0),
         };
     },
@@ -397,10 +397,10 @@ export const NavidromeController: ControllerEndpoint = {
 
         const res = await ndApiClient(apiClientProps).getPlaylistList({
             query: {
-                _end: query.startIndex + (query.limit || 0),
+                _end: query.offset + (query.limit || 0),
                 _order: sortOrderMap.navidrome[query.sortOrder],
                 _sort: query.sortBy ? playlistListSortMap.navidrome[query.sortBy] : undefined,
-                _start: query.startIndex,
+                _start: query.offset,
                 q: query.searchTerm,
                 ...customQuery,
             },
@@ -412,14 +412,14 @@ export const NavidromeController: ControllerEndpoint = {
 
         return {
             items: res.body.data.map((item) => ndNormalize.playlist(item, apiClientProps.server)),
-            startIndex: query?.startIndex || 0,
+            offset: query?.offset || 0,
             totalRecordCount: Number(res.body.headers.get('x-total-count') || 0),
         };
     },
     getPlaylistListCount: async ({ apiClientProps, query }) =>
         NavidromeController.getPlaylistList({
             apiClientProps,
-            query: { ...query, limit: 1, startIndex: 0 },
+            query: { ...query, limit: 1, offset: 0 },
         }).then((result) => result!.totalRecordCount!),
     getPlaylistSongList: async (
         args: PlaylistSongListRequest,
@@ -446,7 +446,7 @@ export const NavidromeController: ControllerEndpoint = {
 
         return {
             items: res.body.data.map((item) => ndNormalize.song(item, apiClientProps.server)),
-            startIndex: query?.startIndex || 0,
+            offset: query?.startIndex || 0,
             totalRecordCount: Number(res.body.headers.get('x-total-count') || 0),
         };
     },
@@ -571,10 +571,10 @@ export const NavidromeController: ControllerEndpoint = {
 
         const res = await ndApiClient(apiClientProps).getSongList({
             query: {
-                _end: query.startIndex + (query.limit || -1),
+                _end: query.offset + (query.limit || -1),
                 _order: sortOrderMap.navidrome[query.sortOrder],
                 _sort: songListSortMap.navidrome[query.sortBy],
-                _start: query.startIndex,
+                _start: query.offset,
                 album_artist_id: query.albumArtistIds,
                 album_id: query.albumIds,
                 artist_id: query.artistIds,
@@ -594,14 +594,14 @@ export const NavidromeController: ControllerEndpoint = {
             items: res.body.data.map((song) =>
                 ndNormalize.song(song, apiClientProps.server, query.imageSize),
             ),
-            startIndex: query?.startIndex || 0,
+            offset: query?.offset || 0,
             totalRecordCount: Number(res.body.headers.get('x-total-count') || 0),
         };
     },
     getSongListCount: async ({ apiClientProps, query }) =>
         NavidromeController.getSongList({
             apiClientProps,
-            query: { ...query, limit: 1, startIndex: 0 },
+            query: { ...query, limit: 1, offset: 0 },
         }).then((result) => result!.totalRecordCount!),
     getStructuredLyrics: SubsonicController.getStructuredLyrics,
     getTags: async (args) => {
@@ -650,10 +650,10 @@ export const NavidromeController: ControllerEndpoint = {
 
         const res = await ndApiClient(apiClientProps).getUserList({
             query: {
-                _end: query.startIndex + (query.limit || 0),
+                _end: query.offset + (query.limit || 0),
                 _order: sortOrderMap.navidrome[query.sortOrder],
                 _sort: userListSortMap.navidrome[query.sortBy],
-                _start: query.startIndex,
+                _start: query.offset,
                 ...query._custom?.navidrome,
             },
         });
@@ -664,7 +664,7 @@ export const NavidromeController: ControllerEndpoint = {
 
         return {
             items: res.body.data.map((user) => ndNormalize.user(user)),
-            startIndex: query?.startIndex || 0,
+            offset: query?.offset || 0,
             totalRecordCount: Number(res.body.headers.get('x-total-count') || 0),
         };
     },
